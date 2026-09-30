@@ -1,17 +1,12 @@
 import { cookies } from "next/headers";
 import Link from "next/link";
-import {
-  moodFor,
-  pseudonymFor,
-  tapeTiltFor,
-  tiltFor,
-  timeAgo,
-  type Confession,
-} from "@/lib/confessions";
+import { bayard } from "@/lib/bayard";
+import { moodFor, pseudonymFor, timeAgo, type Confession } from "@/lib/confessions";
 import { createClient } from "@/utils/supabase/server";
 import { signOut } from "./actions";
 import { ComposeForm } from "./compose-form";
 import { SameButton } from "./same-button";
+import { SleepyFlower, Sunflower, WiltedFlower } from "./sunflower";
 
 export default async function Page() {
   const supabase = createClient(await cookies());
@@ -41,78 +36,95 @@ export default async function Page() {
   return (
     <main className="page">
       <header className="booth-header">
-        <span className="neon">open 24/7</span>
+        <p className="badge">
+          <span className="rest">open 24/7</span>
+          <span className="alt">i&apos;m not looking.</span>
+        </p>
         <h1 className="title">
-          the confession <span className="accent">booth</span>
+          <span>the</span> <span>confession</span>{" "}
+          <span>
+            <span className="accent">booth</span>
+          </span>
         </h1>
+        <Sunflower variant="hero" />
         <p className="tagline">no names. no judgment. (ok, a little judgment.)</p>
 
         <div className="userbar">
           {user ? (
             <>
-              <span>you&apos;re in, anonymous soul 🕯️</span>
+              <span className="whoami">&gt; you&apos;re in, anonymous soul</span>
               <form action={signOut}>
-                <button type="submit" className="ghost small">
+                <button type="submit" className="btn ghost small">
                   slip out
                 </button>
               </form>
             </>
           ) : (
-            <Link href="/login" className="whisper small">
-              log in to confess →
+            <Link href="/login" className="btn">
+              log in to confess{" "}
+              <span className="arrow" aria-hidden="true">
+                -&gt;
+              </span>
             </Link>
           )}
         </div>
       </header>
 
+      <hr className="px-rule" />
+
       {user && <ComposeForm />}
 
       {error ? (
         <div className="empty">
-          <p className="empty-title">the booth is closed for renovations 🚧</p>
+          <WiltedFlower />
+          <h2 className="empty-title">the booth is closed for renovations</h2>
           <p>Supabase says: {error.message}</p>
         </div>
       ) : confessions.length === 0 ? (
         <div className="empty">
-          <p className="empty-title">it&apos;s suspiciously quiet in here…</p>
+          <SleepyFlower />
+          <h2 className="empty-title">{bayard("it’s suspiciously quiet in here...")}</h2>
           <p>Be the first to confess.</p>
         </div>
       ) : (
         <>
-          <p className="count">
-            {confessions.length} {confessions.length === 1 ? "secret" : "secrets"} and counting
-          </p>
+          <h2 className="count">
+            {bayard(`${confessions.length} ${confessions.length === 1 ? "secret" : "secrets"} and counting`)}
+          </h2>
           <section className="wall" aria-label="Confessions">
-            {confessions.map((c) => {
+            {confessions.map((c, index) => {
               const mood = moodFor(c.mood);
               return (
-                <article
-                  key={c.id}
-                  className="note"
-                  style={
-                    {
-                      "--note": mood.color,
-                      "--tilt": `${tiltFor(c.id)}deg`,
-                      "--tape-tilt": `${tapeTiltFor(c.id)}deg`,
-                    } as React.CSSProperties
-                  }
-                >
-                  <span className="mood-chip">
-                    {mood.emoji} {mood.label}
-                  </span>
-                  <p className="note-body">{c.body}</p>
-                  <footer className="note-foot">
-                    <span className="byline">
-                      — {pseudonymFor(c.id)}
-                      <br />
+                <article key={c.id} className="entry" style={{ "--i": Math.min(index, 8) } as React.CSSProperties}>
+                  <header className="entry-meta">
+                    <span className="mood">
+                      <span className="face" aria-hidden="true">
+                        {mood.face}
+                      </span>
+                      {mood.label}
+                    </span>
+                    <span className="entry-when">
+                      <span>#{String(c.id).padStart(4, "0")}</span>
                       <time dateTime={c.created_at}>{timeAgo(c.created_at)}</time>
                     </span>
+                  </header>
+                  <p className="entry-body">
+                    {c.body}
+                    {index === 0 && (
+                      <span className="cursor" aria-hidden="true">
+                        _
+                      </span>
+                    )}
+                  </p>
+                  <footer className="entry-foot">
+                    <span className="alias">— {pseudonymFor(c.id)}</span>
                     <SameButton id={c.id} count={c.same_count} active={mySames.has(c.id)} signedIn={!!user} />
                   </footer>
                 </article>
               );
             })}
           </section>
+          <p className="wall-end">-- that&apos;s every secret. for now. --</p>
         </>
       )}
     </main>

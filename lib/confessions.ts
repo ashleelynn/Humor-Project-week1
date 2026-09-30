@@ -1,11 +1,11 @@
 export const MAX_LENGTH = 280;
 
 export const MOODS = [
-  { id: "petty", label: "petty", emoji: "😈", color: "#ffb3c7" },
-  { id: "cringe", label: "cringe", emoji: "🫣", color: "#ffe680" },
-  { id: "unhinged", label: "unhinged", emoji: "🌀", color: "#b8f2c4" },
-  { id: "wholesome", label: "wholesome", emoji: "🥹", color: "#bfe0ff" },
-  { id: "food-crime", label: "food crime", emoji: "🍕", color: "#ffc896" },
+  { id: "petty", label: "petty", face: ">_>" },
+  { id: "cringe", label: "cringe", face: ">_<" },
+  { id: "unhinged", label: "unhinged", face: "@_@" },
+  { id: "wholesome", label: "wholesome", face: "^_^" },
+  { id: "food-crime", label: "food crime", face: "o_O" },
 ] as const;
 
 export type MoodId = (typeof MOODS)[number]["id"];
@@ -51,14 +51,6 @@ export function pseudonymFor(id: number) {
   const adjective = ADJECTIVES[hash(id, 1) % ADJECTIVES.length];
   const noun = NOUNS[hash(id, 2) % NOUNS.length];
   return `${/^[aeiou]/.test(adjective) ? "an" : "a"} ${adjective} ${noun}`;
-}
-
-export function tiltFor(id: number) {
-  return ((hash(id, 3) % 70) - 35) / 10; // -3.5deg to 3.4deg
-}
-
-export function tapeTiltFor(id: number) {
-  return ((hash(id, 4) % 120) - 60) / 10;
 }
 
 export function timeAgo(iso: string, now = Date.now()) {

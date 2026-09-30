@@ -9,7 +9,7 @@ import { createClient } from "@/utils/supabase/server";
 export type ConfessState = { error: string | null; postedAt: number | null };
 
 export async function postConfession(_prev: ConfessState, formData: FormData): Promise<ConfessState> {
-  const body = String(formData.get("body") ?? "").trim();
+  const body = String(formData.get("body") ?? "").replace(/\r\n?/g, "\n").trim();
   const mood = String(formData.get("mood") ?? "");
 
   if (body.length < 3) return { error: "At least 3 characters. Be brave.", postedAt: null };
