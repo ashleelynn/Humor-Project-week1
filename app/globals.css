@@ -1,0 +1,481 @@
+:root {
+  --night: #120b22;
+  --night-2: #1f1338;
+  --text: #f4ecff;
+  --muted: rgba(244, 236, 255, 0.7);
+  --glow: #ff5fa2;
+  --lime: #d4ff4f;
+  --paper-ink: #2a2238;
+  --panel: rgba(255, 255, 255, 0.06);
+  --panel-border: rgba(255, 255, 255, 0.18);
+  color-scheme: dark;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+}
+
+body {
+  min-height: 100vh;
+  color: var(--text);
+  font-family: var(--font-ui), system-ui, sans-serif;
+  background:
+    radial-gradient(900px 500px at 15% -10%, rgba(255, 95, 162, 0.22), transparent 60%),
+    radial-gradient(900px 600px at 95% 10%, rgba(120, 90, 255, 0.25), transparent 60%),
+    var(--night);
+  background-attachment: fixed;
+}
+
+a {
+  color: inherit;
+}
+
+.page {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 48px 16px 96px;
+}
+
+/* ---------- header ---------- */
+
+.booth-header {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.neon {
+  display: inline-block;
+  font-family: var(--font-display);
+  font-size: 12px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--glow);
+  border: 2px solid var(--glow);
+  border-radius: 999px;
+  padding: 6px 14px;
+  text-shadow: 0 0 8px var(--glow);
+  box-shadow: 0 0 14px rgba(255, 95, 162, 0.55), inset 0 0 10px rgba(255, 95, 162, 0.35);
+  animation: flicker 5s infinite;
+}
+
+@keyframes flicker {
+  0%, 18%, 20%, 22%, 60%, 62%, 100% { opacity: 1; }
+  19%, 21%, 61% { opacity: 0.3; }
+}
+
+.title {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: clamp(34px, 8vw, 84px);
+  line-height: 1;
+  letter-spacing: -0.02em;
+  margin: 18px 0 10px;
+}
+
+.title.small {
+  font-size: clamp(28px, 6vw, 44px);
+}
+
+.title .accent {
+  display: inline-block;
+  color: var(--night);
+  background: var(--lime);
+  padding: 0 0.15em;
+  transform: rotate(-3deg);
+  box-shadow: 6px 6px 0 var(--glow);
+}
+
+.tagline {
+  color: var(--muted);
+  font-size: 17px;
+  margin: 18px auto 0;
+  max-width: 520px;
+}
+
+.userbar {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 22px;
+  color: var(--muted);
+}
+
+.userbar form {
+  margin: 0;
+}
+
+/* ---------- buttons ---------- */
+
+.whisper,
+.ghost {
+  font: inherit;
+  font-weight: 700;
+  border-radius: 999px;
+  padding: 12px 22px;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-block;
+  transition: transform 0.15s ease, box-shadow 0.15s ease, opacity 0.15s ease;
+}
+
+.whisper {
+  background: var(--lime);
+  color: var(--night);
+  border: 2px solid var(--night);
+  box-shadow: 4px 4px 0 var(--glow);
+}
+
+.whisper:hover:not(:disabled) {
+  transform: translate(-2px, -2px);
+  box-shadow: 6px 6px 0 var(--glow);
+}
+
+.whisper:active:not(:disabled) {
+  transform: translate(2px, 2px);
+  box-shadow: 1px 1px 0 var(--glow);
+}
+
+.ghost {
+  background: transparent;
+  color: var(--text);
+  border: 2px solid var(--panel-border);
+}
+
+.ghost:hover:not(:disabled) {
+  border-color: var(--text);
+}
+
+.whisper.small,
+.ghost.small {
+  padding: 7px 16px;
+  font-size: 14px;
+}
+
+button:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+/* ---------- compose ---------- */
+
+.compose {
+  max-width: 680px;
+  margin: 0 auto 48px;
+  padding: 22px;
+  border: 2px dashed var(--panel-border);
+  border-radius: 20px;
+  background: var(--panel);
+  backdrop-filter: blur(6px);
+}
+
+.compose-label {
+  display: block;
+  font-family: var(--font-hand);
+  font-size: 30px;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.compose textarea {
+  width: 100%;
+  resize: vertical;
+  min-height: 96px;
+  padding: 14px 16px;
+  border-radius: 12px;
+  border: 2px solid transparent;
+  background: #fff8d6;
+  color: var(--paper-ink);
+  font-family: var(--font-hand);
+  font-size: 26px;
+  line-height: 1.2;
+}
+
+.compose textarea:focus {
+  outline: none;
+  border-color: var(--lime);
+}
+
+.moods {
+  border: 0;
+  padding: 0;
+  margin: 14px 0 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.moods legend {
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--muted);
+  margin-bottom: 8px;
+}
+
+.mood-option input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.mood-option span {
+  display: inline-block;
+  padding: 6px 12px;
+  border-radius: 999px;
+  border: 2px solid var(--panel-border);
+  cursor: pointer;
+  font-size: 14px;
+  transition: transform 0.12s ease;
+}
+
+.mood-option span:hover {
+  transform: rotate(-2deg) scale(1.05);
+}
+
+.mood-option input:checked + span {
+  background: var(--note);
+  border-color: var(--note);
+  color: var(--paper-ink);
+  font-weight: 700;
+}
+
+.mood-option input:focus-visible + span {
+  outline: 2px solid var(--lime);
+  outline-offset: 2px;
+}
+
+.compose-foot {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.counter {
+  font-size: 13px;
+  color: var(--muted);
+}
+
+.counter.warn {
+  color: var(--glow);
+  font-weight: 700;
+}
+
+.form-error,
+.form-ok {
+  margin: 14px 0 0;
+  font-weight: 600;
+}
+
+.form-error {
+  color: #ff8fb8;
+}
+
+.form-ok {
+  color: var(--lime);
+}
+
+/* ---------- the wall ---------- */
+
+.count {
+  text-align: center;
+  font-family: var(--font-hand);
+  font-size: 26px;
+  color: var(--muted);
+  margin: 0 0 28px;
+}
+
+.wall {
+  columns: 270px;
+  column-gap: 28px;
+}
+
+.note {
+  position: relative;
+  break-inside: avoid;
+  margin: 18px 0 34px;
+  padding: 26px 20px 16px;
+  background: var(--note);
+  color: var(--paper-ink);
+  border-radius: 3px 3px 22px 3px;
+  transform: rotate(var(--tilt));
+  box-shadow: 0 14px 28px rgba(0, 0, 0, 0.4), inset 0 -3px 0 rgba(0, 0, 0, 0.06);
+  transition: transform 0.2s ease;
+}
+
+.note:hover {
+  transform: rotate(0deg) scale(1.03);
+}
+
+.note::before {
+  content: "";
+  position: absolute;
+  top: -13px;
+  left: 50%;
+  width: 96px;
+  height: 26px;
+  transform: translateX(-50%) rotate(var(--tape-tilt));
+  background: rgba(255, 255, 255, 0.5);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
+}
+
+.mood-chip {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  background: rgba(0, 0, 0, 0.08);
+  padding: 4px 9px;
+  border-radius: 999px;
+}
+
+.note-body {
+  font-family: var(--font-hand);
+  font-weight: 500;
+  font-size: 27px;
+  line-height: 1.12;
+  margin: 12px 0 18px;
+  overflow-wrap: anywhere;
+}
+
+.note-foot {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 10px;
+}
+
+.note-foot form {
+  margin: 0;
+}
+
+.byline {
+  font-size: 13px;
+  font-style: italic;
+  opacity: 0.75;
+}
+
+.same {
+  flex-shrink: 0;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 800;
+  color: var(--paper-ink);
+  background: transparent;
+  border: 2px solid var(--paper-ink);
+  border-radius: 999px;
+  padding: 5px 11px;
+  cursor: pointer;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: transform 0.12s ease;
+}
+
+.same:hover {
+  transform: scale(1.08) rotate(-3deg);
+}
+
+.same.active {
+  background: var(--paper-ink);
+  color: var(--note);
+}
+
+.empty {
+  text-align: center;
+  padding: 48px 16px;
+  border: 2px dashed var(--panel-border);
+  border-radius: 20px;
+  color: var(--muted);
+}
+
+.empty-title {
+  font-family: var(--font-hand);
+  font-size: 34px;
+  color: var(--text);
+  margin: 0 0 8px;
+}
+
+/* ---------- login ---------- */
+
+.login-page {
+  max-width: 560px;
+}
+
+.back {
+  display: inline-block;
+  color: var(--muted);
+  text-decoration: none;
+  margin-bottom: 28px;
+}
+
+.back:hover {
+  color: var(--text);
+}
+
+.login-card {
+  text-align: center;
+  padding: 32px 22px;
+  border: 2px dashed var(--panel-border);
+  border-radius: 24px;
+  background: var(--panel);
+}
+
+.login-form {
+  display: grid;
+  gap: 14px;
+  text-align: left;
+  margin-top: 26px;
+}
+
+.login-form label {
+  display: grid;
+  gap: 6px;
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--muted);
+}
+
+.login-form input {
+  font: inherit;
+  font-size: 16px;
+  text-transform: none;
+  letter-spacing: normal;
+  padding: 12px 14px;
+  border-radius: 12px;
+  border: 2px solid var(--panel-border);
+  background: rgba(0, 0, 0, 0.25);
+  color: var(--text);
+}
+
+.login-form input:focus {
+  outline: none;
+  border-color: var(--lime);
+}
+
+.login-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 6px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .neon {
+    animation: none;
+  }
+  .note,
+  .note:hover {
+    transition: none;
+  }
+}
