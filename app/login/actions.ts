@@ -35,3 +35,14 @@ export async function authenticate(_prev: AuthState, formData: FormData): Promis
   revalidatePath("/", "layout");
   redirect("/");
 }
+
+export async function signInWithGoogle() {
+  const origin = (await headers()).get("origin") ?? "";
+  const supabase = createClient(await cookies());
+  const { data, error } = await supabase.auth.signInWithOAuth({
+    provider: "google",
+    options: { redirectTo: `${origin}/auth/callback` },
+  });
+  if (error || !data.url) redirect("/login?error=google");
+  redirect(data.url);
+}

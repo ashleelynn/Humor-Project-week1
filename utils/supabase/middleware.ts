@@ -3,6 +3,7 @@ import { type NextRequest, NextResponse } from "next/server";
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
 const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY;
+const PROTECTED_PATHS = ["/profile"];
 
 export const createClient = async (request: NextRequest) => {
   // Create an unmodified response
@@ -34,7 +35,16 @@ export const createClient = async (request: NextRequest) => {
   );
 
   // Refreshes the auth session if it has expired.
-  await supabase.auth.getUser();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user && PROTECTED_PATHS.some((p) => request.nextUrl.pathname.startsWith(p))) {
+    const url = request.nextUrl.clone();
+    url.pathname = "/login";
+    url.search = "";
+    return NextResponse.redirect(url);
+  }
 
   return supabaseResponse
 };

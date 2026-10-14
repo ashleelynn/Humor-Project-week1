@@ -5,6 +5,7 @@ import { moodFor, pseudonymFor, timeAgo, type Confession } from "@/lib/confessio
 import { createClient } from "@/utils/supabase/server";
 import { signOut } from "./actions";
 import { ComposeForm } from "./compose-form";
+import { NewConfessions } from "./new-confessions";
 import { SameButton } from "./same-button";
 import { SleepyFlower, Sunflower, WiltedFlower } from "./sunflower";
 
@@ -53,6 +54,9 @@ export default async function Page() {
           {user ? (
             <>
               <span className="whoami">&gt; you&apos;re in, anonymous soul</span>
+              <Link href="/profile" className="btn ghost small">
+                profile
+              </Link>
               <form action={signOut}>
                 <button type="submit" className="btn ghost small">
                   slip out
@@ -88,6 +92,7 @@ export default async function Page() {
         </div>
       ) : (
         <>
+          <NewConfessions latestId={confessions[0].id} />
           <h2 className="count">
             {bayard(`${confessions.length} ${confessions.length === 1 ? "secret" : "secrets"} and counting`)}
           </h2>

@@ -1,6 +1,12 @@
 import Link from "next/link";
 import { Sunflower } from "../sunflower";
+import { signInWithGoogle } from "./actions";
 import { LoginForm } from "./login-form";
+
+const ERRORS: Record<string, string> = {
+  confirm: "That sign-in link didn't work. Try again.",
+  google: "Google sign-in isn't available right now. Try email instead.",
+};
 
 export default async function LoginPage({ searchParams }: { searchParams: Promise<{ error?: string }> }) {
   const { error } = await searchParams;
@@ -36,7 +42,18 @@ export default async function LoginPage({ searchParams }: { searchParams: Promis
           Your email stays with us. Your confessions go on the wall with a random alias, never your name.
         </p>
       </header>
-      <LoginForm initialError={error === "confirm" ? "That confirmation link didn't work. Try signing in." : undefined} />
+      <form action={signInWithGoogle} className="oauth">
+        <button type="submit" className="btn">
+          continue with google{" "}
+          <span className="arrow" aria-hidden="true">
+            -&gt;
+          </span>
+        </button>
+      </form>
+      <p className="or" aria-hidden="true">
+        -- or use your email --
+      </p>
+      <LoginForm initialError={error ? ERRORS[error] : undefined} />
     </main>
   );
 }
