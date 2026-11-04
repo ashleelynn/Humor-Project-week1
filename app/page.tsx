@@ -2,12 +2,11 @@ import { cookies } from "next/headers";
 import Link from "next/link";
 import { moodFor, pseudonymFor, timeAgo, type Confession } from "@/lib/confessions";
 import { createClient } from "@/utils/supabase/server";
-import { signOut } from "./actions";
 import { ComposeForm } from "./compose-form";
 import { ArrowIcon } from "./icons";
 import { NewConfessions } from "./new-confessions";
 import { SameButton } from "./same-button";
-import { SiteNav } from "./site-nav";
+import { AccountActions, BoothTabs, SiteNav } from "./site-nav";
 
 export default async function Page() {
   const supabase = createClient(await cookies());
@@ -37,23 +36,9 @@ export default async function Page() {
   return (
     <main className="page">
       <SiteNav>
-        {user ? (
-          <>
-            <Link href="/profile" className="btn ghost small">
-              Profile
-            </Link>
-            <form action={signOut}>
-              <button type="submit" className="btn small">
-                Slip out
-              </button>
-            </form>
-          </>
-        ) : (
-          <Link href="/login" className="btn small">
-            Log in
-          </Link>
-        )}
+        <AccountActions signedIn={!!user} />
       </SiteNav>
+      <BoothTabs current="confessions" />
 
       <header className="hero">
         <p className="eyebrow">

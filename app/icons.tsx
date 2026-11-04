@@ -26,3 +26,33 @@ export function HeartIcon({ filled }: { filled: boolean }) {
     </svg>
   );
 }
+
+export function VoteIcon({ direction }: { direction: "up" | "down" }) {
+  return (
+    <svg className="vote-icon" viewBox="0 0 20 20" width="18" height="18" aria-hidden="true">
+      <path
+        d={direction === "up" ? "M10 16V4.5M5 9.5l5-5 5 5" : "M10 4v11.5M5 10.5l5 5 5-5"}
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.9"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
+export function CameraIcon() {
+  return (
+    <svg className="camera" viewBox="0 0 24 24" width="28" height="28" aria-hidden="true">
+      <path
+        d="M4 8.5A1.5 1.5 0 0 1 5.5 7h2.25l1.5-2.25h5.5L16.25 7h2.25A1.5 1.5 0 0 1 20 8.5v9a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 4 17.5v-9Z"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.6"
+        strokeLinejoin="round"
+      />
+      <circle cx="12" cy="12.75" r="3.25" fill="none" stroke="currentColor" strokeWidth="1.6" />
+    </svg>
+  );
+}
