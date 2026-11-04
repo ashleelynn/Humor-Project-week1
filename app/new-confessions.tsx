@@ -2,7 +2,6 @@
 
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { bayard } from "@/lib/bayard";
 import { createClient } from "@/utils/supabase/client";
 
 const POLL_MS = 30_000;
@@ -36,8 +35,8 @@ export function NewConfessions({ latestId }: { latestId: number }) {
   if (newCount === 0) return null;
 
   return (
-    <button type="button" className="btn ghost small new-secrets" onClick={() => router.refresh()}>
-      {bayard(`${newCount} new ${newCount === 1 ? "secret" : "secrets"}, show me`)}
+    <button type="button" className="btn ghost small" onClick={() => router.refresh()}>
+      {newCount} new {newCount === 1 ? "secret" : "secrets"}, show me
     </button>
   );
 }

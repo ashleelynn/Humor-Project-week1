@@ -1,33 +1,22 @@
 import type { Metadata, Viewport } from "next";
-import { VT323 } from "next/font/google";
-import localFont from "next/font/local";
+import { DM_Sans, Source_Serif_4 } from "next/font/google";
 import type { ReactNode } from "react";
 import "./globals.css";
 
-// VTC Bayard is a TRIAL font. Only A-Z a-z 0-9 ! , . ? ’ “ ” and space are real glyphs,
-// so the unicode-range sends every other character to VT323.
-const bayard = localFont({
-  src: "./fonts/VTCBayard-Regular.woff2",
-  weight: "400",
-  style: "normal",
+// Hinge sets headlines in Tiempos Headline Light and everything else in Modern Era. Both are
+// licensed faces, so these open fonts stand in: Source Serif 4 (with optical sizes, so big
+// headlines get the sharper display cut) for Tiempos, DM Sans for Modern Era.
+const serif = Source_Serif_4({
+  subsets: ["latin"],
+  axes: ["opsz"],
   display: "swap",
-  variable: "--font-bayard",
-  adjustFontFallback: false, // otherwise out-of-range chars fall to a size-adjusted Arial instead of VT323
-  declarations: [
-    { prop: "unicode-range", value: "U+0020-0021, U+002C, U+002E, U+0030-0039, U+003F, U+0041-005A, U+0061-007A, U+2019, U+201C-201D" },
-    { prop: "ascent-override", value: "85.5%" },
-    { prop: "descent-override", value: "20%" },
-    { prop: "line-gap-override", value: "0%" },
-  ],
+  variable: "--font-serif",
 });
 
-const vt = VT323({
-  weight: "400",
+const sans = DM_Sans({
   subsets: ["latin"],
   display: "swap",
-  variable: "--font-vt",
-  adjustFontFallback: false, // keeps a real monospace fallback during swap, so ASCII columns hold
-  fallback: ["ui-monospace", "Menlo", "Consolas", "monospace"],
+  variable: "--font-sans",
 });
 
 export const metadata: Metadata = {
@@ -35,11 +24,11 @@ export const metadata: Metadata = {
   description: "Anonymous confessions. No names, no judgment (ok, a little judgment).",
 };
 
-export const viewport: Viewport = { colorScheme: "light", themeColor: "#FAF6EA" };
+export const viewport: Viewport = { colorScheme: "light", themeColor: "#FFFEFD" };
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
-    <html lang="en" className={`${bayard.variable} ${vt.variable}`}>
+    <html lang="en" className={`${serif.variable} ${sans.variable}`}>
       <body>{children}</body>
     </html>
   );

@@ -1,13 +1,13 @@
 import { cookies } from "next/headers";
 import Link from "next/link";
-import { bayard } from "@/lib/bayard";
 import { moodFor, pseudonymFor, timeAgo, type Confession } from "@/lib/confessions";
 import { createClient } from "@/utils/supabase/server";
 import { signOut } from "./actions";
 import { ComposeForm } from "./compose-form";
+import { ArrowIcon } from "./icons";
 import { NewConfessions } from "./new-confessions";
 import { SameButton } from "./same-button";
-import { SleepyFlower, Sunflower, WiltedFlower } from "./sunflower";
+import { SiteNav } from "./site-nav";
 
 export default async function Page() {
   const supabase = createClient(await cookies());
@@ -36,66 +36,65 @@ export default async function Page() {
 
   return (
     <main className="page">
-      <header className="booth-header">
-        <p className="badge">
-          <span className="rest">open 24/7</span>
-          <span className="alt">i&apos;m not looking.</span>
+      <SiteNav>
+        {user ? (
+          <>
+            <Link href="/profile" className="btn ghost small">
+              Profile
+            </Link>
+            <form action={signOut}>
+              <button type="submit" className="btn small">
+                Slip out
+              </button>
+            </form>
+          </>
+        ) : (
+          <Link href="/login" className="btn small">
+            Log in
+          </Link>
+        )}
+      </SiteNav>
+
+      <header className="hero">
+        <p className="eyebrow">
+          <span className="rest">Open 24/7</span>
+          <span className="alt">I’m not looking.</span>
         </p>
         <h1 className="title">
-          <span>the</span> <span>confession</span>{" "}
-          <span>
-            <span className="accent">booth</span>
-          </span>
+          The confession <span className="accent">booth.</span>
         </h1>
-        <Sunflower variant="hero" />
-        <p className="tagline">no names. no judgment. (ok, a little judgment.)</p>
-
-        <div className="userbar">
-          {user ? (
-            <>
-              <span className="whoami">&gt; you&apos;re in, anonymous soul</span>
-              <Link href="/profile" className="btn ghost small">
-                profile
-              </Link>
-              <form action={signOut}>
-                <button type="submit" className="btn ghost small">
-                  slip out
-                </button>
-              </form>
-            </>
-          ) : (
-            <Link href="/login" className="btn">
-              log in to confess{" "}
-              <span className="arrow" aria-hidden="true">
-                -&gt;
-              </span>
+        <p className="tagline">No names. No judgment. (Ok, a little judgment.)</p>
+        {user ? (
+          <p className="whoami">You’re in, anonymous soul.</p>
+        ) : (
+          <div className="hero-cta">
+            <Link href="/login" className="btn large aubergine">
+              Log in to confess <ArrowIcon />
             </Link>
-          )}
-        </div>
+          </div>
+        )}
       </header>
-
-      <hr className="px-rule" />
 
       {user && <ComposeForm />}
 
       {error ? (
         <div className="empty">
-          <WiltedFlower />
-          <h2 className="empty-title">the booth is closed for renovations</h2>
+          <h2 className="empty-title">The booth is closed for renovations.</h2>
           <p>Supabase says: {error.message}</p>
         </div>
       ) : confessions.length === 0 ? (
         <div className="empty">
-          <SleepyFlower />
-          <h2 className="empty-title">{bayard("it’s suspiciously quiet in here...")}</h2>
+          <h2 className="empty-title">It’s suspiciously quiet in here.</h2>
           <p>Be the first to confess.</p>
         </div>
       ) : (
         <>
-          <NewConfessions latestId={confessions[0].id} />
-          <h2 className="count">
-            {bayard(`${confessions.length} ${confessions.length === 1 ? "secret" : "secrets"} and counting`)}
-          </h2>
+          <div className="wall-head">
+            <h2 className="count">
+              {confessions.length} {confessions.length === 1 ? "secret" : "secrets"} and counting.
+            </h2>
+            <NewConfessions latestId={confessions[0].id} />
+          </div>
           <section className="wall" aria-label="Confessions">
             {confessions.map((c, index) => {
               const mood = moodFor(c.mood);
@@ -110,17 +109,11 @@ export default async function Page() {
                     </span>
                     <span className="entry-when">
                       <span>#{String(c.id).padStart(4, "0")}</span>
+                      <span aria-hidden="true">·</span>
                       <time dateTime={c.created_at}>{timeAgo(c.created_at)}</time>
                     </span>
                   </header>
-                  <p className="entry-body">
-                    {c.body}
-                    {index === 0 && (
-                      <span className="cursor" aria-hidden="true">
-                        _
-                      </span>
-                    )}
-                  </p>
+                  <p className="entry-body">{c.body}</p>
                   <footer className="entry-foot">
                     <span className="alias">— {pseudonymFor(c.id)}</span>
                     <SameButton id={c.id} count={c.same_count} active={mySames.has(c.id)} signedIn={!!user} />
@@ -129,7 +122,7 @@ export default async function Page() {
               );
             })}
           </section>
-          <p className="wall-end">-- that&apos;s every secret. for now. --</p>
+          <p className="wall-end">That’s every secret. For now.</p>
         </>
       )}
     </main>

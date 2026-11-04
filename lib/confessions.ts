@@ -1,11 +1,11 @@
 export const MAX_LENGTH = 280;
 
 export const MOODS = [
-  { id: "petty", label: "petty", face: ">_>" },
-  { id: "cringe", label: "cringe", face: ">_<" },
-  { id: "unhinged", label: "unhinged", face: "@_@" },
-  { id: "wholesome", label: "wholesome", face: "^_^" },
-  { id: "food-crime", label: "food crime", face: "o_O" },
+  { id: "petty", label: "Petty", face: ">_>" },
+  { id: "cringe", label: "Cringe", face: ">_<" },
+  { id: "unhinged", label: "Unhinged", face: "@_@" },
+  { id: "wholesome", label: "Wholesome", face: "^_^" },
+  { id: "food-crime", label: "Food crime", face: "o_O" },
 ] as const;
 
 export type MoodId = (typeof MOODS)[number]["id"];

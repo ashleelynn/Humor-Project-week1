@@ -1,7 +1,6 @@
 "use client";
 
 import { useActionState } from "react";
-import { bayard } from "@/lib/bayard";
 import { authenticate, type AuthState } from "./actions";
 
 export function LoginForm({ initialError }: { initialError?: string }) {
@@ -13,7 +12,7 @@ export function LoginForm({ initialError }: { initialError?: string }) {
   return (
     <form action={formAction} className="login-form">
       <label>
-        email
+        Email
         <input
           className="field"
           name="email"
@@ -26,7 +25,7 @@ export function LoginForm({ initialError }: { initialError?: string }) {
         />
       </label>
       <label>
-        password
+        Password
         <input
           className="field"
           name="password"
@@ -42,34 +41,25 @@ export function LoginForm({ initialError }: { initialError?: string }) {
         <button type="submit" name="intent" value="signin" className="btn" disabled={pending}>
           {pending ? (
             <>
-              {bayard("checking the guest list...")}{" "}
-              <span className="spin" aria-hidden="true">
-                <span>{"|/-\\"}</span>
-              </span>
+              Checking the guest list <span className="spin" aria-hidden="true" />
             </>
           ) : (
-            "slip inside"
+            "Slip inside"
           )}
         </button>
         <button type="submit" name="intent" value="signup" className="btn ghost" disabled={pending}>
-          {bayard("first time? sign up")}
+          First time? Sign up
         </button>
       </div>
 
       {state.error && (
         <p className="form-msg is-error" role="alert">
-          <span className="glyph" aria-hidden="true">
-            x_x
-          </span>
-          <span>{state.error}</span>
+          {state.error}
         </p>
       )}
       {state.message && (
         <p className="form-msg is-ok" role="status">
-          <span className="glyph" aria-hidden="true">
-            {"\\o/"}
-          </span>
-          <span>{state.message}</span>
+          {state.message}
         </p>
       )}
     </form>

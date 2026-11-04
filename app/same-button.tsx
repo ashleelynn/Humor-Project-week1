@@ -3,16 +3,16 @@
 import Link from "next/link";
 import { useOptimistic, useState } from "react";
 import { toggleSame } from "./actions";
+import { HeartIcon } from "./icons";
 
 type Props = { id: number; count: number; active: boolean; signedIn: boolean };
 
 function Label({ active, count }: { active: boolean; count: number }) {
   return (
     <>
-      <span className="same-face" aria-hidden="true">
-        {active ? "\\o/" : "._."}
-      </span>{" "}
-      <span>same</span> <span className="same-count">{count}</span>
+      <HeartIcon filled={active} />
+      <span>Same</span>
+      <span className="same-count">{count}</span>
     </>
   );
 }
@@ -48,7 +48,7 @@ export function SameButton({ id, count, active, signedIn }: Props) {
           if (!optimistic.active) setPopping(true);
         }}
         onAnimationEnd={(e) => {
-          if (e.animationName === "hop") setPopping(false);
+          if (e.animationName === "like-pop") setPopping(false);
         }}
       >
         <Label active={optimistic.active} count={optimistic.count} />

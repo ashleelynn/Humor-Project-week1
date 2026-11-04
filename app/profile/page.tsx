@@ -3,6 +3,7 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { createClient } from "@/utils/supabase/server";
 import { signOut } from "../actions";
+import { SiteNav } from "../site-nav";
 import { ProfileForm } from "./profile-form";
 
 export default async function ProfilePage() {
@@ -19,42 +20,33 @@ export default async function ProfilePage() {
     .maybeSingle();
 
   return (
-    <main className="page login-page">
-      <Link href="/" className="back">
-        <span className="arrow" aria-hidden="true">
-          &lt;-
-        </span>{" "}
-        back to the wall
-      </Link>
-      <header className="booth-header login-head">
-        <p className="badge">
-          <span className="rest">members only</span>
+    <main className="page page--narrow">
+      <SiteNav>
+        <Link href="/" className="btn ghost small">
+          The wall
+        </Link>
+        <form action={signOut}>
+          <button type="submit" className="btn small">
+            Slip out
+          </button>
+        </form>
+      </SiteNav>
+      <header className="hero hero--sm">
+        <p className="eyebrow">
+          <span className="rest">Members only</span>
         </p>
         <h1 className="title title--sm">
-          <span>the real</span>{" "}
-          <span>
-            <span className="accent">you</span>
-          </span>
+          The real <span className="accent">you.</span>
         </h1>
         <p className="tagline">Only you can see this page. The wall still shows a random alias, never your name.</p>
       </header>
 
       {error && (
         <p className="form-msg is-error" role="alert">
-          <span className="glyph" aria-hidden="true">
-            x_x
-          </span>
-          <span>Couldn&apos;t load your profile: {error.message}</span>
+          Couldn&apos;t load your profile: {error.message}
         </p>
       )}
       <ProfileForm email={user.email ?? ""} profile={profile} />
-
-      <hr className="px-rule" />
-      <form action={signOut}>
-        <button type="submit" className="btn ghost small">
-          slip out
-        </button>
-      </form>
     </main>
   );
 }
