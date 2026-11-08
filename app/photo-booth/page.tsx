@@ -8,7 +8,7 @@ import { AccountActions, BoothTabs, SiteNav } from "../site-nav";
 import { DropForm } from "./drop-form";
 import { VoteButtons } from "./vote-buttons";
 
-// Gemini usually answers in a few seconds; this leaves room for a slow one.
+// Claude usually answers in well under a minute; this leaves room for a slow one.
 export const maxDuration = 60;
 
 type TopCaption = { id: number; mood: MoodId; body: string; score: number; generations: { image_path: string } | null };

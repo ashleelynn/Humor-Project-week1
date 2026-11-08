@@ -68,6 +68,9 @@ begin
 end;
 $$;
 
+-- Only the trigger runs this; nobody can call it through the API.
+revoke execute on function public.sync_same_count() from public, anon, authenticated;
+
 create trigger confession_sames_count
   after insert or delete on public.confession_sames
   for each row execute function public.sync_same_count();

@@ -5,7 +5,7 @@ An anonymous confessions wall for college students, built with Next.js and Supab
 It has two rooms:
 
 - **Confessions** (`/`): logged-in users post anonymous confessions with a mood; everyone can "same" the ones they relate to.
-- **Photo booth** (`/photo-booth`): logged-in users drop a photo, Gemini writes three confessions in the voice of whatever's in it, and everyone votes them up or down.
+- **Photo booth** (`/photo-booth`): logged-in users drop a photo, Claude writes three confessions in the voice of whatever's in it, and everyone votes them up or down.
 
 ## Setup
 
@@ -17,6 +17,8 @@ Run these in the Supabase SQL Editor, in order:
 2. `supabase/profiles.sql`: profiles and the `avatars` bucket
 3. `supabase/photo-booth.sql`: AI generations, captions, votes, the `booth-photos` bucket, and RLS on every public table
 
+If the booth tables already exist from an earlier draft (the page says a column like `captions.mood` does not exist), run `supabase/photo-booth-reset.sql` first, then `photo-booth.sql` again. If you set up the database before the trigger functions were locked down, run `supabase/lockdown.sql` once.
+
 ### 2. Environment variables
 
 Set these in `.env.local` for local dev, and in Vercel under Settings → Environment Variables:
@@ -25,8 +27,8 @@ Set these in `.env.local` for local dev, and in Vercel under Settings → Enviro
 | --- | --- |
 | `NEXT_PUBLIC_SUPABASE_URL` | Supabase → Project Settings → API |
 | `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` | Supabase → Project Settings → API keys |
-| `GEMINI_API_KEY` | [Google AI Studio](https://aistudio.google.com/apikey). The free tier is enough. Server-only, never prefix it with `NEXT_PUBLIC_`. |
-| `GEMINI_MODEL` | Optional. Defaults to `gemini-3.5-flash-lite`. |
+| `ANTHROPIC_API_KEY` | [Claude Console](https://platform.claude.com/settings/keys). Server-only, never prefix it with `NEXT_PUBLIC_`. |
+| `ANTHROPIC_MODEL` | Optional. Defaults to `claude-opus-5-5`. |
 
 ### 3. Run it
 
@@ -55,5 +57,5 @@ Scores and "same" counts are kept in sync by triggers, so nobody can set them di
 Built for Sam: a Columbia junior, chronically online, from the Midwest and new to New York.
 
 - **A reason to come back every day.** The photo booth has a daily theme ("Bodega cats", "Butler at 2am", "Something that reminds you of home") that changes at midnight New York time, and a "Top caption, last 24 hours" spotlight.
-- **Scarcity makes drops count.** Five drops a day keeps the feed curated and the free Gemini quota alive.
-- **Better than Crackd.** Voting is one tap with instant feedback and no page reload. Captions are tagged with the same moods as confessions so the two rooms feel like one app. Photos stay anonymous. Gemini also writes alt text, so the feed works with a screen reader.
+- **Scarcity makes drops count.** Five drops a day keeps the feed curated and the API bill small.
+- **Better than Crackd.** Voting is one tap with instant feedback and no page reload. Captions are tagged with the same moods as confessions so the two rooms feel like one app. Photos stay anonymous. Claude also writes alt text, so the feed works with a screen reader.

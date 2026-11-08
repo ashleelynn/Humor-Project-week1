@@ -3,7 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
-import { BoothAIError, writeCaptions } from "@/lib/gemini";
+import { BoothAIError, writeCaptions } from "@/lib/claude";
 import {
   DAILY_DROPS,
   MAX_CONTEXT,
@@ -35,7 +35,7 @@ export async function dropPhoto(_prev: DropState, formData: FormData): Promise<D
   } = await supabase.auth.getUser();
   if (!user) redirect("/login");
 
-  // The database enforces this too; checking first saves a Gemini call that couldn't be saved.
+  // The database enforces this too; checking first saves a Claude call that couldn't be saved.
   const { data: used, error: countError } = await supabase.rpc("generations_today");
   if (countError) return fail(countError.message);
   if ((used as number) >= DAILY_DROPS) return fail(`That’s all ${DAILY_DROPS} drops for today. New theme at midnight.`);

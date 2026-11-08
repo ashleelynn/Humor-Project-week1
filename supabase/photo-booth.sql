@@ -1,7 +1,7 @@
--- The Photo Booth: logged-in users drop a photo, Gemini writes three confessions in the photo's voice,
+-- The Photo Booth: logged-in users drop a photo, Claude writes three confessions in the photo's voice,
 -- and everyone votes on them. Run this once in the Supabase SQL Editor, after schema.sql and profiles.sql.
 
--- One row per Gemini call: the photo it saw, the exact prompt it got, the model that answered,
+-- One row per Claude call: the photo it saw, the exact prompt it got, the model that answered,
 -- and the alt text it wrote so screen reader users get the joke too.
 create table public.generations (
   id bigint generated always as identity primary key,
@@ -22,7 +22,7 @@ revoke all on public.generations from anon, authenticated;
 grant select (id, created_at, image_path, theme, alt_text) on public.generations to anon, authenticated;
 grant insert (image_path, theme, alt_text, context, model, prompt) on public.generations to authenticated;
 
--- Five drops per person per New York day. Keeps the free Gemini quota alive and makes each drop count.
+-- Five drops per person per New York day. Keeps the API bill small and makes each drop count.
 create function public.generations_today()
 returns int
 language sql
@@ -47,7 +47,7 @@ create policy "Drop photos as yourself, five a day"
   on public.generations for insert to authenticated
   with check (user_id = (select auth.uid()) and (select public.generations_today()) < 5);
 
--- The three confessions Gemini wrote for a drop. Nobody can edit or delete them, so votes stay honest.
+-- The three confessions Claude wrote for a drop. Nobody can edit or delete them, so votes stay honest.
 create table public.captions (
   id bigint generated always as identity primary key,
   generation_id bigint not null references public.generations (id) on delete cascade,
@@ -143,6 +143,9 @@ begin
   return null;
 end;
 $$;
+
+-- Only the trigger runs this; nobody can call it through the API.
+revoke execute on function public.sync_caption_score() from public, anon, authenticated;
 
 create trigger caption_votes_score
   after insert or update or delete on public.caption_votes
